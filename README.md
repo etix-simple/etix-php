@@ -1,4 +1,10 @@
 # Etix PHP SDK
+
+[![Build Status](https://travis-ci.org/etix-simple/etix-php.svg?branch=master)](https://travis-ci.org/etix-simple/etix-php)
+[![Latest Stable Version](https://poser.pugx.org/etix-simple/etix-php/v/stable)](https://packagist.org/packages/etix-simple/etix-php)
+[![Total Downloads](https://poser.pugx.org/etix-simple/etix-php/downloads)](https://packagist.org/packages/etix-simple/etix-php)
+[![License](https://poser.pugx.org/etix-simple/etix-php/license)](https://packagist.org/packages/etix-simple/etix-php)
+
 This library uses the REST API, documentation is found at [api.etix.com](https://api.etix.com/docs/).
 
 ## NOT PRODUCTION READY
