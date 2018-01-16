@@ -86,16 +86,13 @@ $dateTime = $etix->getTimestamp();
 
 ````
 
+## Development
 
-## Tests
-
+    # TESTS
     phpunit --bootstrap vendor/autoload.php tests/EtixTest.php
 
-
-## Development Docker
-    
+    # START LOCAL DOCKER
     docker-compose build && docker-compose up --force-recreate
 
-## Documentation
-
+    # Documentation
     phpDocumentor -d ./src -t docs
