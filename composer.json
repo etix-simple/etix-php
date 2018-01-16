@@ -1,0 +1,24 @@
+{
+    "name": "etix-simple/etix-php",
+    "description": "PHP SDK for Etix API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Clayton Bell",
+            "email": "clay.bell@etix.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.6.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "monolog/monolog": "^1.23",
+        "myclabs/php-enum": "^1.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "Etix": "src/"
+        }    
+    }
+}

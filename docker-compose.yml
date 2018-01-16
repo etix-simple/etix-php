@@ -1,0 +1,22 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    webserver:
+      image: nginx:alpine
+      container_name: etix-php-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./dev/phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "80:80"
+
+    php-fpm:
+      build: dev/phpdocker/php-fpm
+      container_name: etix-php-php-fpm
+      working_dir: /application
+      volumes:
+        - .:/application
