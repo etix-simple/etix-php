@@ -524,6 +524,17 @@ class Etix
         return $this->request('PUT', $route, $opt);
     }
 
+    /**
+     * @param string $method GET | POST | PUT | PATCH | DELETE
+     * $param string $route
+     * @param array $opt Options
+     * [
+     *       'headers'       =>  [],
+     *       'query'         =>  [],
+     *       'body'          =>  []
+     * ]
+     * @return object
+     */
     public function request($method, $route, $opt)
     {
         // Defaults
@@ -539,7 +550,6 @@ class Etix
             return $resObj;
         }
     }
-
 
     /**
      * Just a test function
