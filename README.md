@@ -7,9 +7,6 @@
 
 This library uses the REST API, documentation is found at [api.etix.com](https://api.etix.com/docs/).
 
-## NOT PRODUCTION READY
-This library is currently in Alpha, not ready for production use.
-
 ## Install
 
     composer require etix-simple/etix-php
@@ -22,6 +19,9 @@ This library is currently in Alpha, not ready for production use.
 use Etix\Etix;
     
 $etix = new Etix();
+
+// Ask your Etix service representative for the key type code
+define('ETIX_EVENTBOOKING_KEY_TYPE', 'KTEXAMPLE8AC7B18D1DAEEE4DDDDDDD5E0732F40E3EEA1533333333017C6DE32A6');
 
 // $apiKey = $etix->login($username, $password)->getApiKey();
 $etix->loginWithApiKey($apiKey);
