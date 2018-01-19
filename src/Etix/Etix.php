@@ -26,17 +26,12 @@ class Etix
     /**
      * @var string
      */
-    protected $apiKey;
-
-    /**
-     * @var string
-     */
-    protected $apiKeyType;
-
-    /**
-     * @var string
-     */
     protected $authToken;
+
+    /**
+     * @var boolean
+     */
+    protected $verifySsl = true;
 
     /**
      * @param Monolog\Logger $logger Optional logger instance
@@ -84,6 +79,16 @@ class Etix
     }
 
     /**
+     * @param string $verifySsl
+     * @return \Etix\Etix
+     */
+    public function setVerifySsl($verifySsl)
+    {
+        $this->verifySsl = $verifySsl;
+        return $this;
+    }
+
+    /**
      *  @return \GuzzleHttp\Client
      */
     public function getClient()
@@ -91,7 +96,7 @@ class Etix
         if (!isset($this->client)) {
             $opt = [
                 'base_uri'  =>  $this->baseUri,
-                'verify'    =>  false,
+                'verify'    =>  $this->verifySsl === true,
             ];
             if (isset($this->logger)) {
                 $opt['handler'] = $this->createLoggingHandlerStack([

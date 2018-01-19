@@ -21,7 +21,9 @@ echo 'API Key: '.$apiKey;
 */
 $etix
     ->setBaseUri(ETIX_TEST_URI2)
-    ->loginWithApiKey(ETIX_APIKEY1)
+    ->setVerifySsl(false)
+    ->login(ETIX_USERNAME, ETIX_PASSWORD)
+    // ->loginWithApiKey(ETIX_APIKEY1)
 ;
 
 
@@ -39,8 +41,10 @@ $etix
 //     'showPrivate'   =>  true,
 // ]);
 // var_dump($events);
-// $event = $etix->getEvent(2154345);
+$event = $etix->getEvent(2154345);
 // var_dump($event);
+// header("Content-Type: application/json");
+// echo json_encode($event);
 // $eventDataSnapshot = $etix->getEventDataSnapshot(2154345);
 // var_dump($eventDataSnapshot);
 
@@ -58,16 +62,18 @@ $etix
 // ]);
 // var_dump($artists);
 // $artist = $etix->getArtist(20364);
+// header("Content-Type: application/json");
+// echo json_encode($artist);
 // var_dump($artist);
 
 // Categories
 // $categories = $etix->getCategories();
 // var_dump($categories);
-// $category = $etix->getCategory(4);
-// var_dump($category);
+$category = $etix->getCategory(4);
+var_dump($category);
 
-$stats = $etix->getValidationStatistics(2154345);
-var_dump($stats);
+// $stats = $etix->getValidationStatistics(2154345);
+// var_dump($stats);
 
 // Get Time from Etix
 // $time = $etix->getTimestamp();
