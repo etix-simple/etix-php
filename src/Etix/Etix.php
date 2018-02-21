@@ -11,7 +11,7 @@ class Etix
     /**
      * @var string
      */
-    protected $baseUri = 'https://api.etix.com/v1/';
+    protected $baseUri = 'https://api.etix.com/v2/';
 
     /**
      * @var Monolog\Logger
@@ -125,7 +125,7 @@ class Etix
         ]);
         if ($res->getStatusCode() === 200) {
             $resObj = json_decode($res->getBody(), false);
-            $this->setAuthToken($resObj->token);
+            $this->setAuthToken($resObj->authToken);
         }
         return $this;
     }
@@ -135,7 +135,7 @@ class Etix
      */
     public function logout()
     {
-        $res = $this->getClient()->post('logout', [
+        $res = $this->getClient()->delete('login', [
             'headers'   =>  [
                 'authToken'     =>  $this->getAuthToken(),
             ]
@@ -148,30 +148,20 @@ class Etix
     }
 
     /**
-     * @param string $apiKey Validation API Key
-     * @return \Etix\Etix
-     */
-    public function loginWithValidationApiKey($apiKey)
-    {
-        return $this->loginWithApiKey($apiKey, ApiKeyType::validation);
-    }
-
-    /**
      * @param string $apiKey API Key
      * @param string $apiKeyType API Key Type is optional
      * @return \Etix\Etix
      */
-    public function loginWithApiKey($apiKey, $apiKeyType = ApiKeyType::eventBooking)
+    public function loginWithApiKey($apiKey)
     {
         $res = $this->getClient()->post('apikey/login', [
             'headers'   =>  [
                 'apiKey'        =>  $apiKey,
-                'apiKeyType'    =>  $apiKeyType,
             ]
         ]);
         if ($res->getStatusCode() === 200) {
             $resObj = json_decode($res->getBody(), false);
-            $this->setAuthToken($resObj->token);
+            $this->setAuthToken($resObj->authToken);
         }
         return $this;
     }
@@ -195,24 +185,15 @@ class Etix
     }
 
     /**
-     * @return string
-     */
-    public function getValidationApiKey()
-    {
-        return getApiKey(ApiKeyType::validation);
-    }
-
-    /**
      *
      * @param string $apiKeyType API Key Type is optional
      * @return string
      */
-    public function getApiKey($apiKeyType = ApiKeyType::eventBooking)
+    public function getApiKey()
     {
         $resObj = $this->get('apikey/exchange', [
             'headers'   =>  [
                 'authToken'     =>  $this->getAuthToken(),
-                'apiKeyType'    =>  $apiKeyType,
             ]
         ]);
         return $resObj->apiKey;
@@ -221,11 +202,10 @@ class Etix
     /**
      * @param array $opt Options:
      * [
-     *       'pageNum'   =>  0,
-     *       'pageSize'  =>  10,
-     *       'count'     =>  false,
-     *       'sortBy'    =>  'name',
-     *       'sortDir'   =>  'ASC'
+     *       'pageNumber'       =>  0,
+     *       'pageSize'         =>  10,
+     *       'sortBy'           =>  'name',
+     *       'sortAscending'    =>  true
      * ]
      * @return array
      */
@@ -233,29 +213,20 @@ class Etix
     {
         // Default Options
         $opt = (object) array_merge([
-            'pageNum'   =>  0,
-            'pageSize'  =>  10,
-            'count'     =>  false,
-            'sortBy'    =>  'name',
-            'sortDir'   =>  'ASC',
+            'pageNumber'        =>  0,
+            'pageSize'          =>  10,
+            'sortBy'            =>  'name',
+            'sortAscending'     =>  true,
         ], (array) $opt);
 
-        return $this->get('venues', [
+        return $this->get('venue', [
             'query' =>  [
-                'pageNum'       =>  intval($opt->pageNum),
+                'pageNumber'    =>  intval($opt->pageNumber),
                 'pageSize'      =>  intval($opt->pageSize),
-                'count'         =>  $opt->count === true || $opt->count === 'yes' ? 'yes' : 'no',
                 'sortBy'        =>  $opt->sortBy,
-                'sortDir'       =>  $opt->sortDir === 'ASC' ? 'ASC' : 'DESC',
+                'sortAscending' =>  $opt->sortAscending === true,
             ],
         ]);
-    }
-    /**
-     * @return int
-     */
-    public function getVenueCount()
-    {
-        return $this->getVenues(['count'=>true])->count;
     }
 
     /**
@@ -264,7 +235,7 @@ class Etix
      */
     public function getVenue($venueId)
     {
-        return $this->get('venues/'.intval($venueId));
+        return $this->get('venue/'.intval($venueId));
     }
 
     /**
@@ -273,9 +244,8 @@ class Etix
      *       'venueId'       =>  9999,
      *       'fields'        =>  null,
      *       'purpose'       =>  null,
-     *       'pageNum'       =>  0,
+     *       'pageNumber'    =>  0,
      *       'pageSize'      =>  10,
-     *       'count'         =>  false,
      *       'sortBy'        =>  'name',
      *       'sortDir'       =>  'DESC',
      *       'showPrivate'   =>  false
@@ -289,49 +259,28 @@ class Etix
             'venueId'       =>  0,
             'fields'        =>  null, //'id,name,beginTimestamp,beginTimestamp8601',
             'purpose'       =>  null,
-            'pageNum'       =>  0,
+            'pageNumber'    =>  0,
             'pageSize'      =>  10,
-            'count'         =>  false,
             'sortBy'        =>  'name',
             'sortDir'       =>  'DESC',
             'showPrivate'   =>  false,
 
         ], (array) $opt);
 
-        return $this->get('events', [
+        return $this->get('event', [
             'query' =>  [
                 'venueId'       =>  intval($opt->venueId),
                 'fields'        =>  $opt->fields,
                 'purpose'       =>  $opt->purpose,
-                'pageNum'       =>  intval($opt->pageNum),
+                'pageNumber'    =>  intval($opt->pageNumber),
                 'pageSize'      =>  intval($opt->pageSize),
-                'count'         =>  $opt->count === true || $opt->count === 'yes' ? 'yes' : 'no',
                 'sortBy'        =>  $opt->sortBy,
                 'sortDir'       =>  $opt->sortDir === 'ASC' ? 'ASC' : 'DESC',
                 'showPrivate'   =>  $opt->showPrivate === 'true' ? 'true' : 'false',
             ],
         ]);
     }
-    /**
-     * @param array $opt Options
-     * [
-     *       'venueId'       =>  9999,
-     *       'purpose'       =>  null,
-     *       'showPrivate'   =>  false
-     * ]
-     * @return int
-     */
-    public function getEventCount($opt = [])
-    {
-        // Default Options
-        $opt = (object) array_merge([
-            'venueId'       =>  0,
-            'purpose'       =>  null,
-            'showPrivate'   =>  false,
 
-        ], (array) $opt, ['count'=>true]);
-        return $this->getEvents($opt)->count;
-    }
 
     /**
      * @param int $eventId
@@ -339,7 +288,7 @@ class Etix
      */
     public function getEvent($eventId)
     {
-        return $this->get('events/'.intval($eventId));
+        return $this->get('event/'.intval($eventId));
     }
 
     /**
@@ -374,9 +323,8 @@ class Etix
     /**
      * @param array $opt Options
      * [
-     *       'pageNum'       =>  0,
+     *       'pageNumber'    =>  0,
      *       'pageSize'      =>  10,
-     *       'count'         =>  false
      * ]
      * @return array
      */
@@ -384,42 +332,33 @@ class Etix
     {
         // Default Options
         $opt = (object) array_merge([
-            'pageNum'       =>  0,
+            'pageNumber'    =>  0,
             'pageSize'      =>  10,
-            'count'         =>  false,
         ], (array) $opt);
 
-        return $this->get('artists', [
+        return $this->get('artist', [
             'query' =>  [
-                'pageNum'       =>  intval($opt->pageNum),
+                'pageNumber'    =>  intval($opt->pageNumber),
                 'pageSize'      =>  intval($opt->pageSize),
-                'count'         =>  $opt->count === true || $opt->count === 'yes' ? 'yes' : 'no',
             ],
         ]);
     }
-    /**
-     * @return int
-     */
-    public function getArtistCount()
-    {
-        return $this->getArtists(['count'=>true])->count;
-    }
+
     /**
      * @param int $artistId
      * @return object
      */
     public function getArtist($artistId)
     {
-        return $this->get('artists/'.intval($artistId));
+        return $this->get('artist/'.intval($artistId));
     }
 
 
     /**
      * @param array $opt Options
      * [
-     *       'pageNum'       =>  0,
+     *       'pageNumber'    =>  0,
      *       'pageSize'      =>  10,
-     *       'count'         =>  false
      * ]
      * @return array
      */
@@ -427,33 +366,25 @@ class Etix
     {
         // Default Options
         $opt = (object) array_merge([
-            'pageNum'       =>  0,
+            'pageNumber'    =>  0,
             'pageSize'      =>  10,
-            'count'         =>  false,
         ], (array) $opt);
 
-        return $this->get('categories', [
+        return $this->get('category', [
             'query' =>  [
-                'pageNum'       =>  intval($opt->pageNum),
+                'pageNumber'    =>  intval($opt->pageNumber),
                 'pageSize'      =>  intval($opt->pageSize),
-                'count'         =>  $opt->count === true || $opt->count === 'yes' ? 'yes' : 'no',
             ],
         ]);
     }
-    /**
-     * @return int
-     */
-    public function getCategoryCount()
-    {
-        return $this->getCategories(['count'=>true])->count;
-    }
+
     /**
      * @param int $categoryId
      * @return object
      */
     public function getCategory($categoryId)
     {
-        return $this->get('categories/'.intval($categoryId));
+        return $this->get('category/'.intval($categoryId));
     }
 
     /**
@@ -501,7 +432,15 @@ class Etix
      */
     public function getTimestamp()
     {
-        return new \DateTime($this->get('timestamp')->timestamp);
+        return new \DateTime($this->get('timestamp')->time8601);
+    }
+
+    /**
+     * @return object
+     */
+    public function getMe()
+    {
+        return $this->get('me');
     }
 
     /**

@@ -20,19 +20,22 @@ $apiKey = $etix
 echo 'API Key: '.$apiKey;
 */
 $etix
-    ->setBaseUri(ETIX_TEST_URI2)
+    ->setBaseUri(ETIX_TEST_URI3)
     ->setVerifySsl(false)
-    ->login(ETIX_USERNAME, ETIX_PASSWORD)
-    // ->loginWithApiKey(ETIX_APIKEY1)
+    // ->login(ETIX_USERNAME, ETIX_PASSWORD)
+    ->loginWithApiKey(ETIX_APIKEY1)
 ;
 
 
 // Venues
-// $venues = $etix->getVenues();
-// var_dump($venues);
+// $venues = $etix->getVenues([
+//     'pageNumber'    =>  400,
+//     'pageSize'      =>  3,
+// ]);
+// echo json_encode($venues);
 // $venue = $etix->getVenue(6970);
-// var_dump($venue);
-// echo 'venue count: '.$etix->getVenueCount();
+// echo json_encode($venue);
+
 
 // Events
 // $events = $etix->getEvents([
@@ -41,7 +44,7 @@ $etix
 //     'showPrivate'   =>  true,
 // ]);
 // var_dump($events);
-$event = $etix->getEvent(2154345);
+// $event = $etix->getEvent(2154345);
 // var_dump($event);
 // header("Content-Type: application/json");
 // echo json_encode($event);
@@ -56,21 +59,18 @@ $event = $etix->getEvent(2154345);
 
 // Artists
 // $artists = $etix->getArtists([
-//     // 'pageNum'   =>  1,
-//     'count'     =>  true,
-//     // 'pageSize'  =>  1,
+//     'pageNumber'    =>  2,
+//     'pageSize'      =>  4,
 // ]);
-// var_dump($artists);
+// echo json_encode($artists);
 // $artist = $etix->getArtist(20364);
-// header("Content-Type: application/json");
 // echo json_encode($artist);
-// var_dump($artist);
 
 // Categories
 // $categories = $etix->getCategories();
-// var_dump($categories);
-$category = $etix->getCategory(4);
-var_dump($category);
+// echo json_encode($categories);
+// $category = $etix->getCategory(4);
+// echo json_encode($category);
 
 // $stats = $etix->getValidationStatistics(2154345);
 // var_dump($stats);
@@ -78,6 +78,10 @@ var_dump($category);
 // Get Time from Etix
 // $time = $etix->getTimestamp();
 // echo 'Time: '.$time->format('c');
+
+// Me
+// $me = $etix->getMe();
+// echo json_encode($me);
 
 // Logout
 $etix->logout();
