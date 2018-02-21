@@ -26,6 +26,18 @@ $etix
     ->loginWithApiKey(ETIX_APIKEY1)
 ;
 
+// Orders
+// $orders = $etix->getOrders([
+//     'pageNumber'    =>  100,
+//     'pageSize'      =>  5,
+//     'beginDate'     =>  '2017-10-01',
+//     'endDate'       =>  '2017-10-02',
+// ]);
+// echo json_encode($orders);
+
+$order = $etix->getOrder(132914816);
+echo json_encode($order);
+
 
 // Venues
 // $venues = $etix->getVenues([

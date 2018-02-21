@@ -1,4 +1,4 @@
-# Etix PHP SDK
+# Etix PHP SDK Version 2
 
 [![Build Status](https://travis-ci.org/etix-simple/etix-php.svg?branch=2.0)](https://travis-ci.org/etix-simple/etix-php)
 [![Latest Stable Version](https://poser.pugx.org/etix-simple/etix-php/v/stable)](https://packagist.org/packages/etix-simple/etix-php)

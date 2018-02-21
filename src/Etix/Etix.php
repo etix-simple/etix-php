@@ -428,6 +428,52 @@ class Etix
     }
 
     /**
+     * @param array $opt Options
+     * [
+     *       'pageNumber'    =>  0,
+     *       'pageSize'      =>  10,
+     *       'beginDate'     =>  '2017-01-01',
+     *       'endDate'       =>  '2017-01-02',
+     *       'venueId'       =>  0,
+     *       'eventId'       =>  0,
+     * ]
+     * @return array
+     */
+    public function getOrders($opt = [])
+    {
+        // Default Options
+        $opt = (object) array_merge([
+            'pageNumber'    =>  0,
+            'pageSize'      =>  10,
+            'beginDate'     =>  '2017-01-01',
+            'endDate'       =>  '2017-01-02',
+            'venueId'       =>  0,
+            'eventId'       =>  0,
+        ], (array) $opt);
+
+        return $this->get('order', [
+            'query' =>  [
+                'pageNumber'    =>  intval($opt->pageNumber),
+                'pageSize'      =>  intval($opt->pageSize),
+                'beginDate'     =>  $opt->beginDate,
+                'endDate'       =>  $opt->endDate,
+                'venueId'       =>  intval($opt->venueId),
+                'eventId'       =>  intval($opt->eventId),
+            ],
+        ]);
+    }
+
+    /**
+     * @param int $orderId
+     * @return object
+     */
+    public function getOrder($orderId)
+    {
+        return $this->get('order/'.intval($orderId));
+    }
+
+
+    /**
      * @return DateTime
      */
     public function getTimestamp()
@@ -485,6 +531,7 @@ class Etix
         $opt = array_merge([
             'headers'   =>  [
                 'authToken'     =>  $this->getAuthToken(),
+                'Content-Type'  =>  'application/json',
             ],
         ], (array) $opt);
 
